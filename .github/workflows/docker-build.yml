@@ -28,16 +28,13 @@ jobs:
           region: us-west-2
           image: sec-cron:latest
   terraform:
-    defaults:
-      run:
-        working-directory: ${{ env.tf_actions_working_dir }}
     needs: 'build'
     name: terraform
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: hashicorp/setup-terraform@v3
-    
+    - run: cd ./terraform
     - name: Terraform fmt
       id: fmt
       run: terraform fmt -check
