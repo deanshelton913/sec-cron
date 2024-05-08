@@ -1,10 +1,10 @@
-const Parser = require("rss-parser");
-const secParser = require("sec-edgar-parser");
-const dynamo = require("./dynamoDbClient");
-const s3 = require("./s3");
+import Parser from "rss-parser";
+import * as secParser from "sec-edgar-parser";
+import * as dynamo from "./clients/dynamoDbClient";
+import * as s3 from "./clients/s3";
 const parser = new Parser();
-const sleep = (ms) =>
-  new Promise((res, rej) => {
+const sleep = (ms:number):Promise<void> =>
+  new Promise((res) => {
     console.log("Sleeping", ms, "ms");
     setTimeout(() => {
       res();
@@ -14,9 +14,9 @@ const sleep = (ms) =>
 
 
 
-const main = async (skip = 0, take = 50) => {
+const main = async () => {
   const sleepTimeInMs = 300;
-  const url = `https://www.sec.gov/cgi-bin/browse-edgar\?action\=getcurrent\&CIK\=\&type\=\&company\=\&dateb\=\&owner\=include\&start\=${skip}\&count\=${take}\&output\=atom`;
+  const url = `https://www.sec.gov/cgi-bin/browse-edgar\?action\=getcurrent\&CIK\=\&type\=\&company\=\&dateb\=\&owner\=include\&start\=${0}\&count\=${50}\&output\=atom`;
   const userAgent = "SIGILANT  deanshelton913@sigilant.com";
   const xmlFeed = await (
     await fetch(url, { headers: { "user-agent": userAgent } })
@@ -27,6 +27,7 @@ const main = async (skip = 0, take = 50) => {
   for (const item of feed.items) {
     console.log(`${i}/${feed.items.length}`)
     i++;
+    if(!item.link) continue;
     const txtLink = item.link.replace("-index.htm", ".txt");
     const textLinkArray = txtLink.split("/");
     const partitionKey = [
@@ -53,6 +54,6 @@ const main = async (skip = 0, take = 50) => {
   }
 };
 
-module.exports = { main }
+export { main }
 
 main()

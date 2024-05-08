@@ -1,7 +1,7 @@
-const { S3Client, PutObjectCommand, HeadObjectCommand } = require("@aws-sdk/client-s3");
+import { S3Client, PutObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 const bucketName = "sec-edgar-production";
 const client = new S3Client({ region: "us-west-2" }); // Replace "your-region" with your actual AWS region
-async function uploadTextToS3(key, text) {
+async function uploadTextToS3(key:string, text:string) {
 
   const params = {
     Bucket: bucketName,
@@ -22,7 +22,7 @@ async function uploadTextToS3(key, text) {
 }
 
 
-async function checkObjectExists(key) {
+async function checkObjectExists(key:string) {
     const params = {
         Bucket: bucketName,
         Key: key
@@ -35,7 +35,8 @@ async function checkObjectExists(key) {
         console.log(`S3 object exists: ${key}`);
         return true;
     } catch (error) {
-        if (error.name === "NotFound") {
+      const err: {name:string} = error as unknown as Error
+        if (err.name === "NotFound") {
             console.log(`S3 Key does not exist: ${key} `);
             return false;
         }
@@ -45,4 +46,4 @@ async function checkObjectExists(key) {
 }
 
 
-module.exports = { uploadTextToS3, checkObjectExists, bucketName };
+export { uploadTextToS3, checkObjectExists, bucketName };

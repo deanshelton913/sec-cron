@@ -14,7 +14,5 @@ resource "aws_lambda_function" "this" {
 
   role = aws_iam_role.this.arn
 
-  environment {
-    variables = var.env_vars
-  }
+
 }
