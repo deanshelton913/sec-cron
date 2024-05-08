@@ -1,8 +1,7 @@
-FROM node:alpine
-WORKDIR /usr/sec-cron
-RUN npm install typescript -g
-COPY package.json .
-RUN npm install
-COPY . .
-RUN tsc
-CMD ["node", "./dist/index.js"]
+FROM public.ecr.aws/lambda/nodejs:20
+
+# Copy function code
+COPY dist/ ${LAMBDA_TASK_ROOT}
+
+# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+CMD [ "index.handler" ]
