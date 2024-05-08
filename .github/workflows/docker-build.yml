@@ -1,9 +1,13 @@
 name: Docker Build
+
 on:
   push:
     branches:
       - main
-
+defaults:
+  run:
+    working-directory: ${{ env.tf_actions_working_dir }}
+      
 permissions:
   contents: read # for checkout
   pull-requests: write
@@ -27,6 +31,7 @@ jobs:
           region: us-west-2
           image: sec-cron:latest
   terraform:
+    needs: 'build'
     name: terraform
     runs-on: ubuntu-latest
     steps:
