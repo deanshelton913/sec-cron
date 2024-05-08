@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - main
-defaults:
-  run:
-    working-directory: ${{ env.tf_actions_working_dir }}
       
 permissions:
   contents: read # for checkout
@@ -31,6 +28,9 @@ jobs:
           region: us-west-2
           image: sec-cron:latest
   terraform:
+    defaults:
+      run:
+        working-directory: ${{ env.tf_actions_working_dir }}
     needs: 'build'
     name: terraform
     runs-on: ubuntu-latest
