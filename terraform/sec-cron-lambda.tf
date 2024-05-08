@@ -7,7 +7,7 @@ module "sec" {
   prefix = "sec"
 
   image_uri = "432916826401.dkr.ecr.us-west-2.amazonaws.com/sec-cron:latest"
-  image_cmd = "index.main"
+  image_cmd = "./dist/index.main"
 
   env_vars = {
     APP_ENV = "production"
