@@ -55,5 +55,3 @@ const main = async () => {
 };
 
 export { main }
-
-main()
