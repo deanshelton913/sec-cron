@@ -14,7 +14,7 @@ const sleep = (ms:number):Promise<void> =>
 
 
 
-const main = async () => {
+const handler = async () => {
   const sleepTimeInMs = 300;
   const url = `https://www.sec.gov/cgi-bin/browse-edgar\?action\=getcurrent\&CIK\=\&type\=\&company\=\&dateb\=\&owner\=include\&start\=${0}\&count\=${50}\&output\=atom`;
   const userAgent = "SIGILANT  deanshelton913@sigilant.com";
@@ -54,4 +54,4 @@ const main = async () => {
   }
 };
 
-export { main }
+export { handler }
