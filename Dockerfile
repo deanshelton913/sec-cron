@@ -1,7 +1,10 @@
-FROM public.ecr.aws/lambda/nodejs:20
+FROM public.ecr.aws/lambda/nodejs:20 as installer
 
-# Copy function code
-COPY dist/ ${LAMBDA_TASK_ROOT}
+COPY package.json ${LAMBDA_TASK_ROOT}
+RUN npm install
+COPY . ${LAMBDA_TASK_ROOT}
+RUN npm run build
 
-# Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
+FROM public.ecr.aws/lambda/nodejs:20 as prod
+COPY --from=installer ${LAMBDA_TASK_ROOT}/dist/ ${LAMBDA_TASK_ROOT}
 CMD [ "index.handler" ]
